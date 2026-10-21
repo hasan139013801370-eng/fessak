@@ -1,0 +1,24 @@
+
+name: Download Chrome ZIP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: windows-latest
+
+    steps:
+      - name: Download Chrome for Testing
+        shell: pwsh
+        run: |
+          $url = "https://storage.googleapis.com/chrome-for-testing-public/156.0.8078.47/win64/chrome-win64.zip"
+          Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\chrome-win64.zip"
+
+      - name: Upload ZIP to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-win64
+          path: ${{ runner.temp }}\chrome-win64.zip
+          retention-days: 7
+
